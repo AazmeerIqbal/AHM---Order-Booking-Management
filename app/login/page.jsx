@@ -61,14 +61,14 @@ const Login = () => {
       <div className="lg:w-1/2 xl:w-1/3 md:w-2/3 sm:w-full p-6 bg-[rgba(0,0,0,0.6)] rounded-lg drop-shadow-lg">
         <div className="flex justify-center mb-4">
           <img
-            src="https://picsum.photos/200/300"
+            src="assets/logo2.png"
             alt="Login Image"
-            className="w-32 h-32 rounded-full"
+            className="w-32 h-32 "
           />
         </div>
-        <h2 className="text-3xl font-bold text-gray-200 text-center mb-4">
+        {/* <h2 className="text-3xl font-bold text-gray-200 text-center mb-4">
           Login
-        </h2>
+        </h2> */}
         <div className="w-full flex-1 mt-8">
           <div className="mx-auto max-w-xs">
             <form onSubmit={formik.handleSubmit}>
