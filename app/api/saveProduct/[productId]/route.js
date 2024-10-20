@@ -60,7 +60,7 @@ export const POST = async (req, { params }) => {
       .input("Description", sql.VarChar, description)
       .input("UploadOn", sql.DateTime, uploadOn).query(`
         INSERT INTO ProductImages_mst 
-        (CC, ProductCode, UploadOn, CategoryId, UserId, Fabric, FabricWeight, Composition, Color, Description)
+        (CC, ProductCode, UploadOn, CategoryId, UserId, Fabric, FabricWeight, Composition, ColorId, Description)
         OUTPUT inserted.ProductId
         VALUES (@CC, @ProductCode, @UploadOn, @CategoryId, @UserId, @Fabric, @FabricWeight, @Composition, @Color, @Description)
       `);

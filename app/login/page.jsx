@@ -60,11 +60,7 @@ const Login = () => {
     <div className="flex justify-center items-center h-screen absolute inset-0 -z-10 w-full px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
       <div className="lg:w-1/2 xl:w-1/3 md:w-2/3 sm:w-full p-6 bg-[rgba(0,0,0,0.6)] rounded-lg drop-shadow-lg">
         <div className="flex justify-center mb-4">
-          <img
-            src="assets/logo2.png"
-            alt="Login Image"
-            className="w-32 h-32 "
-          />
+          <img src="assets/logo2.png" alt="Login Image" className="w-32 h-32" />
         </div>
         {/* <h2 className="text-3xl font-bold text-gray-200 text-center mb-4">
           Login

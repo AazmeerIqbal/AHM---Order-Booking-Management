@@ -20,7 +20,7 @@ export const GET = async (req, { params }) => {
     const result = await pool
       .request()
       .input("SearchTerm", sql.VarChar(100), input + "%") // Added '%' to match like input
-      .execute("GetTop25ProductCodes");
+      .execute("ProductImages_Sel_Top25");
 
     await closeConnection();
     return new Response(JSON.stringify(result.recordset), { status: 200 });

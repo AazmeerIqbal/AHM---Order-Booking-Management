@@ -37,6 +37,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
   });
 
   const [Category, setCategory] = useState([]);
+  const [Colors, setColors] = useState([]);
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -82,7 +83,25 @@ const AddProduct = ({ setAddProductPopUp }) => {
         console.log("Failed to get Categories", err);
       }
     };
+    const fetchColorsCategory = async () => {
+      try {
+        const response = await fetch(`/api/getColorsCategory/${CompID}`, {
+          method: "GET",
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to get Categories");
+        }
+        setColors(data);
+        // Handle success (e.g., show a success message, reset form, etc.)
+        // console.log("Category: ", Category);
+      } catch (err) {
+        console.log("Failed to get Categories", err);
+      }
+    };
     fetchCategories();
+    fetchColorsCategory();
   }, [session?.user?.companyId]);
 
   // Save button will handle the API call (details and images)
@@ -154,7 +173,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
       />
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         {/* Popup content */}
-        <div className="relative w-[95%] h-[95vh] bg-[#0A0A0A] text-white rounded-lg shadow-lg p-6 overflow-hidden">
+        <div className="relative w-[95%] h-[95vh] bg-[#0A0A0A] text-white rounded-lg shadow-lg p-6 overflow-auto scrollbar-thin scrollbar-thumb-[#2C60EB] scrollbar-track-[#0A0A0A]">
           {/* Navbar */}
           <div className="flex justify-between items-center pb-4 border-b border-gray-700">
             <h2 className="text-lg font-semibold text-white">Add Product</h2>
@@ -234,14 +253,29 @@ const AddProduct = ({ setAddProductPopUp }) => {
                 value={productDetails.composition}
                 onChange={handleInputChange}
               />
-              <input
+              {/* <input
                 type="text"
                 name="color"
                 placeholder="Color"
                 className="w-full p-2 rounded-md bg-gray-800 text-white"
                 value={productDetails.color}
                 onChange={handleInputChange}
-              />
+              /> */}
+              <select
+                name="color"
+                className="w-full p-2 rounded-md bg-gray-800 text-white"
+                value={productDetails.color}
+                onChange={handleInputChange}
+              >
+                <option value="" disabled>
+                  Select Color
+                </option>
+                {Colors.map((col) => (
+                  <option key={col.ColorID} value={col.ColorID}>
+                    {col.Color}
+                  </option>
+                ))}
+              </select>
               <textarea
                 name="description"
                 placeholder="Description"

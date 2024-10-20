@@ -112,9 +112,6 @@ const ProductImagesList = ({ data }) => {
                 Color
               </th>
               <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
-                Description
-              </th>
-              <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
                 Image
               </th>
               <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700"></th>
@@ -144,9 +141,6 @@ const ProductImagesList = ({ data }) => {
                 </td>
                 <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
                   {product.Color}
-                </td>
-                <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
-                  {product.Description}
                 </td>
                 <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
                   {product.ImagePath ? (

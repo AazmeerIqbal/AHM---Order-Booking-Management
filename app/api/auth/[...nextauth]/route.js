@@ -21,7 +21,7 @@ const authOptions = {
             .request()
             .input("UserName", sql.VarChar, username)
             .input("UserPassword", sql.VarChar, password)
-            .execute("Users_CheckLogin");
+            .execute("User_mst_CheckLogin");
 
           const user = result.recordset[0];
           await closeConnection();
