@@ -6,6 +6,7 @@ import { LuLogOut } from "react-icons/lu";
 import { IoIosArrowForward, IoIosAddCircle } from "react-icons/io";
 import ProductImagesList from "@/components/ProductImagesList";
 import AddProduct from "@/components/AddProduct/AddProduct";
+import { useRouter } from "next/navigation";
 
 //Loader
 import { SyncLoader } from "react-spinners";
@@ -15,6 +16,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
 export default function Home() {
+  const router = useRouter();
   const { data: session } = useSession();
   // console.log(session?.user);
   const [items, setItems] = useState([]);
@@ -48,6 +50,11 @@ export default function Home() {
     // }
   }, [inputValue]);
 
+  const handleLogOut = async () => {
+    await signOut({ redirect: false }); // Sign out without auto-redirecting
+    router.push("/login");
+  };
+
   return (
     <>
       <section className="h-full w-full pt-36 relative flex items-center justify-center flex-col">
@@ -68,7 +75,7 @@ export default function Home() {
           {/* <span className="text-md md:text-lg">Hi, {session?.user?.name}</span> */}
           <div
             className="text-xs md:text-sm p-2 border border-gray-400 rounded-md  cursor-pointer hover:bg-gray-100 hover:text-black transition"
-            onClick={() => signOut()}
+            onClick={() => handleLogOut()}
           >
             <LuLogOut />
           </div>

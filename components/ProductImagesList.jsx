@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdFileUpload } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { GrGallery } from "react-icons/gr";
@@ -15,11 +15,14 @@ import "react-toastify/dist/ReactToastify.css";
 // Alert
 import Swal from "sweetalert2";
 
-const ProductImagesList = ({ data }) => {
+const ProductImagesList = ({ data: initialData }) => {
+  // Hold data in local state so we can modify it after deletion
+  const [data, setData] = useState(initialData);
   const [galleryImages, setGalleryImages] = useState([]);
   const [openGallery, setOpenGallery] = useState(false);
   const [loader, setLoader] = useState(false);
 
+  // Handle View Gallery
   const handleViewGallery = async (productId) => {
     console.log("product Id", productId);
     try {
@@ -36,17 +39,16 @@ const ProductImagesList = ({ data }) => {
       setGalleryImages(data);
       setLoader(false);
       setOpenGallery(true);
-      // console.log(data.message); // "Images uploaded and details inserted successfully"
     } catch (error) {
       console.error("Failed to get images:", error.message);
     }
   };
 
-  const DeleteProduct = async (productId) => {
+  // Handle Product Deletion
+  const DeleteProduct = async (productId, ProductCode) => {
     try {
-      // Use SweetAlert2 to show a confirmation dialog
       const result = await Swal.fire({
-        title: `Are you sure you want to delete Product Code: ${productId}?`,
+        title: `Are you sure you want to delete Product Code: ${ProductCode}?`,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -56,12 +58,10 @@ const ProductImagesList = ({ data }) => {
         cancelButtonText: "No, cancel",
       });
 
-      // If the user cancels, stop the function
       if (!result.isConfirmed) {
         return;
       }
 
-      // Proceed with deletion if confirmed
       setLoader(true);
       const response = await fetch(`/api/deleteProduct/${productId}`, {
         method: "DELETE",
@@ -72,6 +72,11 @@ const ProductImagesList = ({ data }) => {
       if (!response.ok) {
         throw new Error(data.message || "Failed to Delete Product");
       }
+
+      // Filter out the deleted product from the state
+      setData((prevData) =>
+        prevData.filter((product) => product.ProductID !== productId)
+      );
 
       // Show success message
       Swal.fire(
@@ -164,7 +169,9 @@ const ProductImagesList = ({ data }) => {
                 <td className="px-2 py-2 border-b border-gray-700">
                   <button
                     className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs md:text-sm lg:text-base rounded-md hover:scale-105 transition duration-200 flex items-center gap-2 justify-center mx-auto"
-                    onClick={() => DeleteProduct(product.ProductID)}
+                    onClick={() =>
+                      DeleteProduct(product.ProductID, product.ProductCode)
+                    }
                   >
                     <MdDelete />
                   </button>
@@ -175,21 +182,21 @@ const ProductImagesList = ({ data }) => {
         </table>
       </div>
 
-      {openGallery == true ? (
+      {openGallery && (
         <LightBoxGallery
           handleViewGallery={handleViewGallery}
           openGallery={openGallery}
           setOpenGallery={setOpenGallery}
           images={galleryImages}
         />
-      ) : null}
+      )}
       <ToastContainer />
-      {loader === true ? (
+      {loader && (
         <SyncLoader
           className="fixed z-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           color="#ffffff"
         />
-      ) : null}
+      )}
     </div>
   );
 };

@@ -7,6 +7,9 @@ import { useSession } from "next-auth/react";
 import { IoMdClose } from "react-icons/io";
 import { MdFileUpload } from "react-icons/md";
 
+//Loader
+import { SyncLoader } from "react-spinners";
+
 // Lightbox Gallery
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -22,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AddProduct = ({ setAddProductPopUp }) => {
   const { data: session } = useSession();
+  const [loader, setLoader] = useState(false);
   const [index, setIndex] = useState(-1);
   const [galleryImages, setGalleryImages] = useState([]); // For image previews
   const [productDetails, setProductDetails] = useState({
@@ -106,6 +110,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
 
   // Save button will handle the API call (details and images)
   const handleSave = async () => {
+    setLoader(true);
     const formData = new FormData();
     formData.append("CC", productDetails.CC);
     formData.append("userId", productDetails.userId);
@@ -153,6 +158,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
         description: "",
       });
       setGalleryImages([]);
+      setLoader(true);
 
       console.log("Product saved successfully!");
     } catch (error) {
@@ -317,6 +323,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
         </div>
       </div>
       <ToastContainer />
+      {loader == true ? <SyncLoader className="mt-4" color="#ffffff" /> : null}
     </>
   );
 };

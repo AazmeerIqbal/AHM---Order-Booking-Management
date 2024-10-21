@@ -92,8 +92,8 @@ export const POST = async (req, { params }) => {
     // Insert images into ProductImages_det
     for (let imageName of savedImages) {
       await pool.request().query(`
-          INSERT INTO ProductImages_det (ProductID, ImagePath, IsMainPic)
-          VALUES (${insertedProductId}, '${imageName}', 0)
+          INSERT INTO ProductImages_det (ProductID, ImagePath)
+          VALUES (${insertedProductId}, '${imageName}')
         `);
     }
 
