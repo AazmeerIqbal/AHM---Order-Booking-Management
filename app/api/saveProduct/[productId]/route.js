@@ -17,6 +17,8 @@ export const POST = async (req, { params }) => {
   const formData = await req.formData();
   const images = formData.getAll("images");
 
+  console.log("CC:", formData.get("CC"));
+
   // Collect other product fields from form data
   const CC = formData.get("CC");
   const productCode = formData.get("productCode");

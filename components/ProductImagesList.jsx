@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { MdFileUpload } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
+import { MdFileUpload, MdDelete } from "react-icons/md";
 import { GrGallery } from "react-icons/gr";
 import LightBoxGallery from "./LightBoxGallery";
 
-//Loader
+// Loader
 import { SyncLoader } from "react-spinners";
 
 // Notification Toaster
@@ -16,11 +15,15 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 
 const ProductImagesList = ({ data: initialData }) => {
-  // Hold data in local state so we can modify it after deletion
-  const [data, setData] = useState(initialData);
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [openGallery, setOpenGallery] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [data, setData] = useState(initialData); // Local state for product data
+  const [galleryImages, setGalleryImages] = useState([]); // State for gallery images
+  const [openGallery, setOpenGallery] = useState(false); // Gallery modal state
+  const [loader, setLoader] = useState(false); // Loading state
+
+  // Update local data state when initialData prop changes
+  useEffect(() => {
+    setData(initialData); // Synchronize local state with new prop data
+  }, [initialData]);
 
   // Handle View Gallery
   const handleViewGallery = async (productId) => {
@@ -81,7 +84,7 @@ const ProductImagesList = ({ data: initialData }) => {
       // Show success message
       Swal.fire(
         "Deleted!",
-        `Product ID: ${productId} has been deleted.`,
+        `Product ID: ${ProductCode} has been deleted.`,
         "success"
       );
     } catch (error) {

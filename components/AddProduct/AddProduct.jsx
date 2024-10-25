@@ -127,6 +127,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
     });
 
     try {
+      console.log("CC:", productDetails.CC);
       const response = await fetch(
         `/api/saveProduct/${productDetails.productCode}`,
         {
@@ -323,7 +324,9 @@ const AddProduct = ({ setAddProductPopUp }) => {
         </div>
       </div>
       <ToastContainer />
-      {loader == true ? <SyncLoader className="mt-4" color="#ffffff" /> : null}
+      {loader == true ? (
+        <SyncLoader className="z-[900] mb-5" color="#ffffff" />
+      ) : null}
     </>
   );
 };
