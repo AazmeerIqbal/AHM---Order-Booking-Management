@@ -5,6 +5,7 @@ const sql = require("mssql");
 
 export const POST = async (req, { params }) => {
   const { productId } = params;
+  console.log("productId:", productId);
 
   if (!productId) {
     return new Response(JSON.stringify({ message: "Product ID is required" }), {
@@ -43,8 +44,8 @@ export const POST = async (req, { params }) => {
       fs.writeFileSync(imagePath, Buffer.from(imageBuffer));
 
       await pool.request().query(`
-        INSERT INTO ProductImages_det (ProductID, ImagePath, IsMainPic)
-        VALUES (${productId}, '${newFileName}', 0)
+        INSERT INTO ProductImages_det (ProductID, ImagePath)
+        VALUES (${productId}, '${newFileName}')
       `);
     }
 

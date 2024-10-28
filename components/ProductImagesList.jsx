@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 const ProductImagesList = ({ data: initialData }) => {
   const [data, setData] = useState(initialData); // Local state for product data
   const [galleryImages, setGalleryImages] = useState([]); // State for gallery images
+  const [ProductDetails, setProductDetails] = useState(null);
   const [openGallery, setOpenGallery] = useState(false); // Gallery modal state
   const [loader, setLoader] = useState(false); // Loading state
 
@@ -26,11 +27,13 @@ const ProductImagesList = ({ data: initialData }) => {
   }, [initialData]);
 
   // Handle View Gallery
-  const handleViewGallery = async (productId) => {
-    console.log("product Id", productId);
+  const handleViewGallery = async (product) => {
+    console.log("product Id", product.ProductID);
     try {
       setLoader(true);
-      const response = await fetch(`/api/getSpecificProductImage/${productId}`);
+      const response = await fetch(
+        `/api/getSpecificProductImage/${product.ProductID}`
+      );
 
       // Parse the response as JSON
       const data = await response.json();
@@ -39,6 +42,7 @@ const ProductImagesList = ({ data: initialData }) => {
         throw new Error(data.message || "Failed to upload images");
       }
 
+      setProductDetails(product);
       setGalleryImages(data);
       setLoader(false);
       setOpenGallery(true);
@@ -164,7 +168,7 @@ const ProductImagesList = ({ data: initialData }) => {
                 <td className="px-2 py-2 border-b border-gray-700">
                   <button
                     className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-xs md:text-sm lg:text-base rounded-md hover:scale-105 transition duration-200 flex items-center gap-2 justify-center mx-auto"
-                    onClick={() => handleViewGallery(product.ProductID)}
+                    onClick={() => handleViewGallery(product)}
                   >
                     <GrGallery />
                   </button>
@@ -187,6 +191,7 @@ const ProductImagesList = ({ data: initialData }) => {
 
       {openGallery && (
         <LightBoxGallery
+          product={ProductDetails}
           handleViewGallery={handleViewGallery}
           openGallery={openGallery}
           setOpenGallery={setOpenGallery}

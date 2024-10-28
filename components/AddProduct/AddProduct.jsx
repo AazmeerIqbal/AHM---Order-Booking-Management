@@ -66,7 +66,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
     setGalleryImages(selectedImages); // Set images for preview
   };
 
-  // Get Product Category
+  // Get Product Category and Color Category
   useEffect(() => {
     const CompID = session?.user?.companyId;
     console.log(session?.user);
@@ -159,7 +159,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
         description: "",
       });
       setGalleryImages([]);
-      setLoader(true);
+      setLoader(false);
 
       console.log("Product saved successfully!");
     } catch (error) {
@@ -318,7 +318,7 @@ const AddProduct = ({ setAddProductPopUp }) => {
               onClick={handleSave}
               className="px-6 py-2 bg-green-600 rounded-md text-white hover:bg-green-700 transition"
             >
-              Save
+              {loader ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
