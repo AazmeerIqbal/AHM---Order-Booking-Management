@@ -7,6 +7,7 @@ import { IoIosArrowForward, IoIosAddCircle } from "react-icons/io";
 import ProductImagesList from "@/components/ProductImagesList";
 import AddProduct from "@/components/AddProduct/AddProduct";
 import { useRouter } from "next/navigation";
+import AddInquiry from "@/components/AddInquiry/AddInquiry";
 
 //Loader
 import { SyncLoader } from "react-spinners";
@@ -22,6 +23,7 @@ export default function Home() {
   const [items, setItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [AddProductPopUp, setAddProductPopUp] = useState(false);
+  const [AddInquiryPopUp, setAddInquiryPopUp] = useState(false);
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
@@ -219,7 +221,10 @@ export default function Home() {
 
             {/* Add Inquiry */}
             <div className="relative group">
-              <button className="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95">
+              <button
+                onClick={() => setAddInquiryPopUp(true)}
+                className="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
+              >
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
 
                 <span className="relative block md:px-6 md:py-3 px-4 py-2 rounded-xl bg-gray-950">
@@ -241,6 +246,10 @@ export default function Home() {
 
           {AddProductPopUp == true ? (
             <AddProduct setAddProductPopUp={setAddProductPopUp} />
+          ) : null}
+
+          {AddInquiryPopUp == true ? (
+            <AddInquiry setAddInquiryPopUp={setAddInquiryPopUp} />
           ) : null}
         </div>
       </div>

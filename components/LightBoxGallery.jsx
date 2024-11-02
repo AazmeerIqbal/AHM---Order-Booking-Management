@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { MdFileUpload } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 //Loader
 import { SyncLoader } from "react-spinners";
@@ -385,9 +386,11 @@ const LightBoxGallery = ({
                     key={index}
                     className="w-full md:h-48 lg:h-56 rounded-lg overflow-hidden cursor-pointer"
                   >
-                    <img
-                      src={`assets/ProductImages/${image.ImagePath}`}
+                    <Image
+                      src={`/assets/ProductImages/${image.ImagePath}`}
                       alt={`Product ${index + 1}`}
+                      width={100}
+                      height={100}
                       className="w-full h-full object-cover"
                       onClick={() => handleImageClick(index)}
                     />

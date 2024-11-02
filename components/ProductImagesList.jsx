@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { MdFileUpload, MdDelete } from "react-icons/md";
 import { GrGallery } from "react-icons/gr";
 import LightBoxGallery from "./LightBoxGallery";
+import Image from "next/image";
 
 // Loader
 import { SyncLoader } from "react-spinners";
@@ -156,10 +157,12 @@ const ProductImagesList = ({ data: initialData }) => {
                 </td>
                 <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
                   {product.ImagePath ? (
-                    <img
-                      src={`assets/ProductImages/${product.ImagePath}`}
+                    <Image
+                      src={`/assets/ProductImages/${product.ImagePath}`}
                       alt="Product"
-                      className="w-20 h-20 mx-auto object-cover rounded-md"
+                      className="mx-auto object-cover rounded-md"
+                      width={80}
+                      height={80}
                     />
                   ) : (
                     <span className="text-gray-500">No Image</span>

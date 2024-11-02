@@ -22,6 +22,7 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 // Notification Toaster
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const AddProduct = ({ setAddProductPopUp }) => {
   const { data: session } = useSession();
@@ -300,11 +301,13 @@ const AddProduct = ({ setAddProductPopUp }) => {
                     key={index}
                     className="w-full h-48 rounded-lg overflow-hidden cursor-pointer"
                   >
-                    <img
+                    <Image
                       src={image.preview}
                       alt={`Product ${index + 1}`}
                       className="w-full h-full object-cover"
                       onClick={() => handleImageClick(index)}
+                      height={100}
+                      width={100}
                     />
                   </div>
                 ))}
