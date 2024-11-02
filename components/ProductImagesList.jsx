@@ -29,7 +29,7 @@ const ProductImagesList = ({ data: initialData }) => {
 
   // Handle View Gallery
   const handleViewGallery = async (product) => {
-    console.log("product Id", product.ProductID);
+    // console.log("product Id", product);
     try {
       setLoader(true);
       const response = await fetch(
@@ -38,7 +38,7 @@ const ProductImagesList = ({ data: initialData }) => {
 
       // Parse the response as JSON
       const data = await response.json();
-
+      console.log("Data", data);
       if (!response.ok) {
         throw new Error(data.message || "Failed to upload images");
       }

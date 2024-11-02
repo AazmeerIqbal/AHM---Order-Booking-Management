@@ -18,30 +18,7 @@ export const GET = async (req, { params }) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT 
-      pi.ImagePath,
-      pm.ProductCode,
-      po.OrderId,
-      po.ProductId,
-      po.CustomerId,
-      c.CustomerName,
-      po.ColorId,
-      cc.Color,
-      po.Rate,
-      po.Quantity,
-      po.Description
-  FROM 
-      [AHDenim].[dbo].[ProductImages_det] AS pi
-  INNER JOIN 
-      [AHDenim].[dbo].[ProductOrder] AS po ON pi.ProductId = po.ProductId
-  LEFT JOIN 
-      [AHDenim].[dbo].[ProductImages_mst] AS pm ON po.ProductId = pm.ProductId
-  LEFT JOIN 
-      [AHDenim].[dbo].[Category_col] AS cc ON po.ColorId = cc.ColorId
-  LEFT JOIN 
-      [AHDenim].[dbo].[Customers] AS c ON po.CustomerId = c.CustomerId
-  WHERE 
-      po.ProductId = ${productId};
+        Select ImagePath, ProductID from ProductImages_det where ProductID = ${productId}
       `);
     await closeConnection();
     return new Response(JSON.stringify(result.recordset), { status: 200 });

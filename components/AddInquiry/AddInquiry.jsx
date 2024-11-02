@@ -143,7 +143,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
     try {
       console.log("CC:", CC);
       const response = await fetch(
-        `/api/addInvoice/${productImage[0].ProductId}`,
+        `/api/addInvoice/${productImage[0].ProductID}`,
         {
           method: "POST",
           body: formData,
@@ -172,7 +172,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
         quantity: "",
         description: "",
       });
-      productImage([]);
+      setProductImage([]);
       setSaveStatus(false);
 
       console.log("Product saved successfully!");
@@ -190,7 +190,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       if (!response.ok) throw new Error("Failed to fetch product image");
       const imageData = await response.json();
       setProductImage(imageData);
-      setData(imageData);
+      // setData(imageData);
       console.log(productImage);
       setProductDetails((prevDetails) => ({
         ...prevDetails,
@@ -198,6 +198,17 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       }));
     } catch (error) {
       console.error("Failed to fetch product image:", error);
+    }
+
+    try {
+      const response = await fetch(
+        `/api/getInvoiceProductDetails/${product.ProductID}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch product image");
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      console.error("Failed to fetch product data:", error);
     }
   };
 
@@ -383,7 +394,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
                   onClick={() => handleSave(productImage)}
                   className="px-6 py-2 bg-green-600 rounded-md text-white hover:bg-green-700 transition"
                 >
-                  {saveStatus ? "Saving..." : "Save"}
+                  {saveStatus == true ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>
@@ -392,7 +403,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
             <div className="w-[48%]">
               {/* Popup Content */}
               <div className="mt-6 h-[75vh] w-full mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2C60EB] scrollbar-track-[#0A0A0A]">
-                {productImage.map((image, index) => (
+                {productImage.slice(0, 1).map((image, index) => (
                   <div
                     key={index}
                     className="w-full md:h-48 lg:h-56 rounded-lg overflow-hidden cursor-pointer"

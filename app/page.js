@@ -76,10 +76,10 @@ export default function Home() {
         <div className="absolute top-3 right-4 flex  items-center gap-4">
           {/* <span className="text-md md:text-lg">Hi, {session?.user?.name}</span> */}
           <div
-            className="text-xs md:text-sm p-2 border border-gray-400 rounded-md  cursor-pointer hover:bg-gray-100 hover:text-black transition"
+            className="text-xs md:text-sm p-2 border border-gray-400 rounded-md  cursor-pointer hover:bg-gray-100 text-white hover:text-black transition"
             onClick={() => handleLogOut()}
           >
-            <LuLogOut />
+            <LuLogOut className="" />
           </div>
         </div>
       </section>

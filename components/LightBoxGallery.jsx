@@ -31,7 +31,7 @@ const LightBoxGallery = ({
   setOpenGallery,
   images,
 }) => {
-  console.log(product);
+  console.log(images);
 
   const { data: session } = useSession();
   const [loader, setLoader] = useState(false);
@@ -72,7 +72,7 @@ const LightBoxGallery = ({
     formData.append("description", productDetails.description);
 
     try {
-      console.log("CC:", productDetails.CC);
+      // console.log("CC:", productDetails.CC);
       const response = await fetch(`/api/updateProduct/${product.ProductID}`, {
         method: "POST",
         body: formData,
@@ -112,7 +112,7 @@ const LightBoxGallery = ({
       ...prevDetails,
       [name]: value,
     }));
-    console.log(productDetails);
+    // console.log(productDetails);
   };
 
   const handleImageClick = (index) => {
@@ -153,7 +153,7 @@ const LightBoxGallery = ({
   // Get Product Category and Color Category
   useEffect(() => {
     const CompID = session?.user?.companyId;
-    console.log(session?.user);
+    // console.log(session?.user);
     const fetchCategories = async () => {
       try {
         const response = await fetch(`/api/getProductCategory/${CompID}`, {
