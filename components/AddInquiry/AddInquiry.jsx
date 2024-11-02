@@ -14,6 +14,10 @@ import "react-toastify/dist/ReactToastify.css";
 // MUI
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { MdDelete } from "react-icons/md";
+
+// Alert
+import Swal from "sweetalert2";
 
 const AddInquiry = ({ setAddInquiryPopUp }) => {
   const { data: session } = useSession();
@@ -21,6 +25,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
   const [items, setItems] = useState([]);
   const [loader, setLoader] = useState(false);
   const [productImage, setProductImage] = useState([]);
+  const [data, setData] = useState([]); // Local state for product data
   const [saveStatus, setSaveStatus] = useState(false);
 
   const [productDetails, setProductDetails] = useState({
@@ -97,7 +102,9 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
     fetchColorsCategory();
   }, [session?.user?.companyId]);
 
+  //Save Invoice
   const handleSave = async (productImage) => {
+    console.log(productImage);
     // Validate if all fields are filled
     const {
       CC,
@@ -122,7 +129,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       return;
     }
 
-    saveStatus(true);
+    setSaveStatus(true);
     const formData = new FormData();
     formData.append("CC", CC);
     formData.append("userId", userId);
@@ -136,7 +143,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
     try {
       console.log("CC:", CC);
       const response = await fetch(
-        `/api/addInvoice/${productImage[0].ProductID}`,
+        `/api/addInvoice/${productImage[0].ProductId}`,
         {
           method: "POST",
           body: formData,
@@ -146,7 +153,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Failed to save product");
-        saveStatus(false);
+        setSaveStatus(false);
       }
 
       // Show success toast
@@ -166,7 +173,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
         description: "",
       });
       productImage([]);
-      saveStatus(false);
+      setSaveStatus(false);
 
       console.log("Product saved successfully!");
     } catch (error) {
@@ -183,6 +190,7 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       if (!response.ok) throw new Error("Failed to fetch product image");
       const imageData = await response.json();
       setProductImage(imageData);
+      setData(imageData);
       console.log(productImage);
       setProductDetails((prevDetails) => ({
         ...prevDetails,
@@ -190,6 +198,54 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
       }));
     } catch (error) {
       console.error("Failed to fetch product image:", error);
+    }
+  };
+
+  // Handle Product Deletion
+  const DeleteProduct = async (OrderId, ProductCode) => {
+    try {
+      const result = await Swal.fire({
+        title: `Are you sure you want to delete Invoice with Product Code: ${ProductCode}?`,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      setLoader(true);
+      const response = await fetch(`/api/deleteInvoice/${OrderId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to Delete Invoice");
+      }
+
+      // Filter out the deleted product from the state
+      setData((prevData) =>
+        prevData.filter((product) => product.OrderId !== OrderId)
+      );
+
+      // Show success message
+      Swal.fire(
+        "Deleted!",
+        `Invoice with Product Code: ${ProductCode} has been deleted.`,
+        "success"
+      );
+    } catch (error) {
+      console.error("Failed to delete product:", error.message);
+      Swal.fire("Error!", error.message, "error");
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -354,6 +410,76 @@ const AddInquiry = ({ setAddInquiryPopUp }) => {
               </div>
             </div>
           </div>
+          {productImage.length > 0 ? (
+            <div className="mt-2">
+              <h1 className="text-start font-bold text-2xl mb-2">
+                Invoice List for Prodect Code:
+                <b> {productImage[0].ProductCode}</b>
+              </h1>
+              <table className="min-w-full table-auto text-left text-white">
+                <thead>
+                  <tr className="bg-gray-800 text-center">
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Product Code
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Customer
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Color
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Rate
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Quantity
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                      Description
+                    </th>
+                    <th className="px-2 py-2 text-sm md:text-base border-b border-gray-700"></th>
+                  </tr>
+                </thead>
+                <tbody className="bg-gray-900 text-center">
+                  {data.map((product) => (
+                    <tr
+                      key={product.OrderId}
+                      className="hover:bg-gray-800 transition duration-150"
+                    >
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.ProductCode}
+                      </td>
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.CustomerName}
+                      </td>
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.Color}
+                      </td>
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.Rate}
+                      </td>
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.Quantity}
+                      </td>
+                      <td className="px-2 py-2 text-sm md:text-base border-b border-gray-700">
+                        {product.Description}
+                      </td>
+                      <td className="px-2 py-2 border-b border-gray-700">
+                        <button
+                          className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs md:text-sm lg:text-base rounded-md hover:scale-105 transition duration-200 flex items-center gap-2 justify-center mx-auto"
+                          onClick={() =>
+                            DeleteProduct(product.OrderId, product.ProductCode)
+                          }
+                        >
+                          <MdDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
         </div>
       </div>
       <ToastContainer />

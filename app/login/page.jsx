@@ -62,7 +62,9 @@ const Login = () => {
       <div className="lg:w-1/2 xl:w-1/3 md:w-2/3 sm:w-full p-6 bg-[rgba(0,0,0,0.6)] rounded-lg drop-shadow-lg">
         <div className="flex justify-center mb-4">
           <Image
-            src="assets/logo2.png"
+            src="/assets/logo2.png"
+            width={100}
+            height={100}
             alt="Login Image"
             className="w-32 h-32"
           />

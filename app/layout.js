@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
       </head>
       <Provider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
         >
           {pathname === "/login" ? (
             <Login />
